@@ -34,3 +34,21 @@ export class BaseVO {
   createBy?: string;
   updateBy?: string;
 }
+
+export class ColumnItem {
+  name!: string;
+  key!: string;
+  sortFn: boolean = true;
+  sortPriority: boolean = true;
+  showFilter: boolean = false;
+  filterFn: boolean = true;
+  filters: Array<{ text: string; value: any }> = [];
+  filterMultiple: boolean = false;
+
+
+  constructor(name: string, key: string) {
+    this.name = name;
+    this.key = key;
+  }
+
+}

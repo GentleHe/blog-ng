@@ -1,27 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseComponent} from "../../../shared";
+import {BaseComponent, ColumnItem} from "../../../shared";
 import {FruitDTO, FruitVO} from "../../domain";
 import {FruitService} from "../../services";
 import {NzTableSortFn, NzTableSortOrder} from "ng-zorro-antd/table";
 import {FormGroup} from "@angular/forms";
 
-export class ColumnItem {
-  name!: string;
-  key!: string;
-  sortFn: boolean = true;
-  sortPriority: boolean = true;
-  showFilter: boolean = false;
-  filterFn: boolean = true;
-  filters: Array<{ text: string; value: any }> = [];
-  filterMultiple: boolean = false;
-
-
-  constructor(name: string, key: string) {
-    this.name = name;
-    this.key = key;
-  }
-
-}
 
 export const basicColumnItemId = new ColumnItem('编号', 'id');
 export const basicColumnItemCreateBy = new ColumnItem('创建人', 'createBy');
