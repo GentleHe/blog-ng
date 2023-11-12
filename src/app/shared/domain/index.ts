@@ -11,7 +11,10 @@ export class Pageable {
   filter: Array<{ key: string; value: any | any[] }> = [];
 
 
-  constructor(page: number, size: number, sort: Array<{ key: string; value: "ascend" | "descend" | null }>, filter: Array<{ key: string; value: any }>) {
+  constructor(page: number, size: number, sort: Array<{
+    key: string;
+    value: "ascend" | "descend" | null
+  }>, filter: Array<{ key: string; value: any }>) {
     this.page = page;
     this.size = size;
     this.sort = sort;
@@ -26,6 +29,7 @@ export class BaseDTO {
   createBy?: string;
   updateBy?: string;
 }
+
 
 export class BaseVO {
   id?: number;
@@ -51,4 +55,23 @@ export class ColumnItem {
     this.key = key;
   }
 
+
+}
+
+export function quickAddIdItem(columnItems: ColumnItem[]): ColumnItem[] {
+  const basicColumnItemId = new ColumnItem('编号', 'id');
+  columnItems.push(basicColumnItemId);
+  return columnItems;
+}
+
+export function quickAddBasicItem(columnItems: ColumnItem[]): ColumnItem[] {
+  const basicColumnItemCreateBy = new ColumnItem('创建人', 'createBy');
+  columnItems.push(basicColumnItemCreateBy);
+  const basicColumnItemCreateTime = new ColumnItem('创建时间', 'createTime');
+  columnItems.push(basicColumnItemCreateTime);
+  const basicColumnItemUpdateBy = new ColumnItem('更新人', 'updateBy');
+  columnItems.push(basicColumnItemUpdateBy);
+  const basicColumnItemUpdateTime = new ColumnItem('更新时间', 'updateTime');
+  columnItems.push(basicColumnItemUpdateTime);
+  return columnItems;
 }

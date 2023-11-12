@@ -97,6 +97,7 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
   quickFill = true;
   validateForm!: FormGroup;
 
+
   /**
    * 字段值是否重复存在？
    * 适用于添加和修改的时候，和该字段值已经存在于数据库中，则提示错误信息
@@ -146,7 +147,9 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
    * @param value 表单数据
    */
   beforeSubmitForm(value: any): void {
-    console.log(`提交表单值: ${JSON.stringify(value)}`);
+    // console.log(`提交表单值: ${value}`);
+    // console.log(`提交表单值:`,value);
+    console.log('submit', this.validateForm.value);
     /**
      *
      * 遍历每个表单控件，将表单控件值标记为已改变，重新计算表单控件的值和验证状态
@@ -156,7 +159,7 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
       this.validateForm.controls[key].updateValueAndValidity();
     }
 
-    this.data = JSON.parse(JSON.stringify(value));
+    this.data = JSON.parse(JSON.stringify(this.validateForm.value));
     console.log(`准备新增到服务器的数据: ${JSON.stringify(this.data)}`);
   }
 
@@ -218,20 +221,19 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
   }
 
   /**
-   * 添加用户提交表单
-   * @param value 表单数据
+   * 提交表单
    */
-  submitForm(value: any): void {
-    this.beforeSubmitForm(value);
+  submitForm(): void {
+    this.beforeSubmitForm(this.validateForm);
 
 
-    this.baseService.addDatum(this.data).subscribe(x => {
-      if (x.status === 0) {
-        this.message.create('success', x.message);
-        this.data = this.initData;
-        this.operationFinished.emit(true);
-      }
-    });
+    // this.baseService.addDatum(this.data).subscribe(x => {
+    //   if (x.status === 0) {
+    //     this.message.create('success', x.message);
+    //     this.data = this.initData;
+    //     this.operationFinished.emit(true);
+    //   }
+    // });
 
 
   }

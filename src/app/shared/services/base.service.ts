@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BaseDTO, BaseVO, Pageable, Result} from "../domain";
 import {Observable} from "rxjs";
-import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 
 export interface BaseInterface<DTO extends BaseDTO, VO extends BaseVO> {
@@ -37,7 +37,7 @@ export interface BaseInterface<DTO extends BaseDTO, VO extends BaseVO> {
    * @param ids
    * todo 暂时不做这个，有个问题就是， RESTFul delete 标准好像不支持 body 参数，
    */
-  deleteSelect(ids: Set<Number>): number[];
+  deleteSelect(ids: Set<Number>): Observable<Result>;
 
   /**
    * 指定列的对应值是否存在
@@ -74,8 +74,13 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
     return this.http.get<Result>(url, {params})
   }
 
-  deleteSelect(ids: Set<Number>): number[] {
-    return [];
+  deleteSelect(ids: Set<Number>): Observable<Result> {
+
+    var body = [99, 98]
+    return this.http.delete<Result>(`${this.baseUrl}${this.serviceName}`,{
+      body
+    });
+
   }
 
   getDatum(id: number): Observable<Result> {
@@ -116,9 +121,18 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
     console.log('params: ' + JSON.stringify(params.keys()))
 
 
-    var resultObservable = this.http.request<Result>('get', `${this.baseUrl}${this.serviceName}`, {
-      params
-    });
+    var body = {};
+
+    var headers = new HttpHeaders()
+    headers = headers.append("Content-Type", "application/json")
+
+    console.log(headers);
+    console.log('body: ', body);
+    var resultObservable = this.http.request<Result>('post', `${this.baseUrl}${this.serviceName}/list`, {
+      params,
+      headers,
+      body
+    },);
 
 
     return resultObservable;

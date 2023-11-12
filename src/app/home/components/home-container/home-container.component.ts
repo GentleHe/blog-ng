@@ -8,7 +8,7 @@ import {Router} from "@angular/router";
 })
 export class HomeContainerComponent implements OnInit {
 
-  isCollapsed=false;
+  isCollapsed=true;
 
   constructor(router: Router) { }
 
