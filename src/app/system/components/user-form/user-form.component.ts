@@ -48,7 +48,7 @@ export class UserFormComponent extends BaseFormComponent<User> implements OnInit
               observer.next(null);
             }else{
               // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
-              if (this.isCreate || !this.isCreate && control.value !== this.data.username) {
+              if (this.isCreate || !this.isCreate && control.value !== this.datum.username) {
                 observer.next({error: true, duplicated: true});
               }
               else {

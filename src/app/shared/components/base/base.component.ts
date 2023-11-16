@@ -35,6 +35,9 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
     // data: VO[] = []
     data: any[] = []
 
+    // 当前编辑的数据
+    editDatum: any;
+
     // 字段名数组
     propertyNames: Array<string> = []
 
@@ -201,6 +204,14 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
     }
 
     goAddDatum() {
+        this.editDatum = null
+        console.log('即将添加数据', this.editDatum);
+        this.modalVisible = true
+    }
+
+    goEditDatum(datum: any) {
+        this.editDatum = datum
+        console.log('即将编辑数据', this.editDatum);
         this.modalVisible = true
     }
 
@@ -218,10 +229,25 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
 
     /**
      * 删除所选id的数据
-     * @param checkedIds
+     * @param id
      */
-    deleteSelect(checkedIds: Set<number>) {
-        this.baseService.deleteSelect(checkedIds).subscribe(x => {
+    deleteData(ids: Set<number>) {
+        this.baseService.deleteData(ids).subscribe(x => {
+            if (!isRequestSuccess(x)) {
+                this.messageService.error(x.message)
+            }
+
+        })
+    }
+
+    /**
+     * 删除指定id的数据
+     * @param id
+     */
+    deleteDatum(id: number) {
+        this.loading = true;
+        this.baseService.deleteDatum(id).subscribe(x => {
+            this.loading = false;
             if (!isRequestSuccess(x)) {
                 this.messageService.error(x.message)
             }

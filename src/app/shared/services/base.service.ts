@@ -35,9 +35,14 @@ export interface BaseInterface<DTO extends BaseDTO, VO extends BaseVO> {
   /**
    * 删除所选的数据
    * @param ids
-   * todo 暂时不做这个，有个问题就是， RESTFul delete 标准好像不支持 body 参数，
    */
-  deleteSelect(ids: Set<Number>): Observable<Result>;
+  deleteData(ids: Set<Number>): Observable<Result>;
+
+  /**
+   * 删除单个数据
+   * @param id
+   */
+  deleteDatum(id: number): Observable<Result>;
 
   /**
    * 指定列的对应值是否存在
@@ -60,8 +65,12 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
   }
 
   addDatum(data: DTO): Observable<Result> {
-    const bodyJson = new HttpParams({fromString: JSON.stringify(data)})
-    return this.http.post<Result>(this.baseUrl + this.serviceName, bodyJson);
+    const body = JSON.parse(JSON.stringify(data))
+    console.log('body: ', body);
+    // var headers = new HttpHeaders()
+    // headers = headers.append("Content-Type", "application/json")
+
+    return this.http.post<Result>(this.baseUrl + this.serviceName, body);
   }
 
   columnDataExists(columnName: string, columnValue: any): Observable<Result> {
@@ -74,13 +83,16 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
     return this.http.get<Result>(url, {params})
   }
 
-  deleteSelect(ids: Set<Number>): Observable<Result> {
-
-    var body = [99, 98]
-    return this.http.delete<Result>(`${this.baseUrl}${this.serviceName}`,{
+  deleteData(ids: Set<Number>): Observable<Result> {
+    var body = [...ids]
+    return this.http.delete<Result>(`${this.baseUrl}${this.serviceName}`, {
       body
     });
+  }
 
+  deleteDatum(id: number): Observable<Result> {
+    console.log(`${this.serviceName}: 即将删除ID为【${id}】的数据`);
+    return this.http.delete<Result>(`${this.baseUrl}${this.serviceName}/${id}`);
   }
 
   getDatum(id: number): Observable<Result> {
@@ -141,8 +153,9 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
   updateDatum(data: DTO): Observable<Result> {
 
     const param = new HttpParams({fromString: JSON.stringify(data)})
-
-    return this.http.patch<Result>(this.baseUrl, param);
+    var headers = new HttpHeaders()
+    headers = headers.append("Content-Type", "application/json")
+    return this.http.put<Result>(`${this.baseUrl}${this.serviceName}/${data.id}`, data,{headers});
   }
 
 
