@@ -45,7 +45,7 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
     pageIndex = 0
 
     // 页码数据量
-    pageSize = 5
+    pageSize = 10
 
     // 总数据量
     total: number = 20

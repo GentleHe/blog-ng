@@ -20,7 +20,7 @@ export class DictionaryTypeValidateForm extends FormGroup {
 })
 export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTypeDTO> {
 
-    listOfControl: Array<{ controlLabel: string, controlKey: string }> = []
+    listOfControl: Array<{ controlLabel: string, controlKey: string, required: boolean }> = []
 
 
 
@@ -45,12 +45,16 @@ export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTyp
             // status: ['', [Validators.required]],
         })
 
-        this.listOfControl.push({controlKey: 'type', controlLabel: '字典分类key'})
-        this.listOfControl.push({controlKey: 'label', controlLabel: '字典分类标签'})
-        this.listOfControl.push({controlKey: 'description', controlLabel: '字典分类描述'})
+        this.listOfControl.push({controlKey: 'type', controlLabel: '字典分类key', required: true})
+        this.listOfControl.push({controlKey: 'label', controlLabel: '字典分类标签', required: true})
+        this.listOfControl.push({controlKey: 'description', controlLabel: '字典分类描述', required: false})
 
         for (let control of this.listOfControl) {
             this.validateForm.addControl(control.controlKey, this.fb.control(''))
+
+          if (control.required) {
+            this.validateForm.controls[control.controlKey].addValidators(Validators.required)
+          }
         }
         this.validateForm.addControl('builtIn', this.fb.control('false'))
 

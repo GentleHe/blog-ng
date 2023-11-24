@@ -57,8 +57,12 @@
 <nz-table
   nzTitle="字典分类管理"
   nzBordered
-  nzFrontPagination="false"
   [nzData]="data"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="true"
   [nzLoading]="loading"
   (nzQueryParams)="onQueryParamsChange($event)"
 >
