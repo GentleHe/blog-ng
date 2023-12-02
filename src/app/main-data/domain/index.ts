@@ -15,8 +15,13 @@ export class DictionaryTypeVO extends BaseVO {
 }
 
 export class DictionaryTypeDTO extends BaseDTO {
-    type!: string;
-    label!: string;
+    type?: string;
+    label?: string;
     description?: string;
-    builtIn: boolean = false;
+    builtIn?: boolean;
+    labelLike?: string;
+    createTimeBegin?: string;
+    createTimeEnd?: string;
+    updateTimeBegin?: string;
+    updateTimeEnd?: string;
 }

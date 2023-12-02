@@ -133,7 +133,7 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
     console.log('params: ' + JSON.stringify(params.keys()))
 
 
-    var body = {};
+    var body = baseDTO;
 
     var headers = new HttpHeaders()
     headers = headers.append("Content-Type", "application/json")
