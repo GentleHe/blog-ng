@@ -1,0 +1,7 @@
+<div class="ant-table-filter-dropdown">
+  <div class="search-box">
+    <input type="text" nz-input [placeholder]="'等值查找'+columnName" [(ngModel)]="searchValue" />
+    <button nz-button  (click)="triggerSearch()" class="search-button">搜索</button>
+    <button nz-button (click)="resetSearch()">重置</button>
+  </div>
+</div>

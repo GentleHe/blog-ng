@@ -2,10 +2,11 @@ import {FormControl, ValidationErrors} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
 // import {isNumeric} from 'rxjs/internal-compatibility';
 
-export * from './data-tree-select';
-export * from './tree-view';
-export * from './icon-view';
-export * from './upload';
+// export * from './data-tree-select';
+// export * from './tree-view';
+// export * from './icon-view';
+// export * from './upload';
+export * from './column-filter'
 
 
 /*

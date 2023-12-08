@@ -18,6 +18,7 @@ import { DictionaryTypeFormComponent } from './components/dictionary-type-form/d
 import {NzCheckboxModule} from "ng-zorro-antd/checkbox";
 import {NzRadioModule} from "ng-zorro-antd/radio";
 import {NzDividerModule} from "ng-zorro-antd/divider";
+import {NzPopoverModule} from "ng-zorro-antd/popover";
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {NzDividerModule} from "ng-zorro-antd/divider";
         NzPopconfirmModule,
         NzCheckboxModule,
         NzRadioModule,
-        NzDividerModule
+        NzDividerModule,
+        NzPopoverModule
     ]
 })
 export class MainDataModule { }

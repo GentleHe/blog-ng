@@ -1,3 +1,7 @@
+import {NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd/tree";
+import {NzTreeBaseService} from "ng-zorro-antd/core/tree";
+import {NzSafeAny} from "ng-zorro-antd/core/types";
+
 export interface Result {
   status: number;
   message: string;
@@ -28,6 +32,8 @@ export class BaseDTO {
   updateTime?: number;
   createBy?: string;
   updateBy?: string;
+  // 字符串的索引签名，这样的话就能允许  this.baseDTO['createBy']='hgf'的方式来给createBy赋值了
+  [key: string]: any;
 }
 
 
@@ -74,4 +80,17 @@ export function quickAddBasicItem(columnItems: ColumnItem[]): ColumnItem[] {
   const basicColumnItemUpdateTime = new ColumnItem('更新时间', 'updateTime');
   columnItems.push(basicColumnItemUpdateTime);
   return columnItems;
+}
+
+export class SelectTree implements NzTreeNodeOptions{
+  [key: string]: NzSafeAny;
+
+  key!: string;
+  title!: string;
+  value!: string;
+  icon!: string;
+  isLeaf = false
+  children: any[] = []
+
+
 }

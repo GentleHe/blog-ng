@@ -1,6 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {BaseComponent, BaseService, ColumnItem, quickAddBasicItem, quickAddIdItem} from "../../../shared";
-import {DictionaryTypeDTO, DictionaryTypeVO} from "../../domain";
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  BaseComponent,
+  BaseService,
+  ColumnFilterComponent,
+  ColumnItem,
+  quickAddBasicItem,
+  quickAddIdItem
+} from "../../../shared";
+import {DictionaryType, DictionaryTypeDTO, DictionaryTypeVO} from "../../domain";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {FruitService} from "../../../other";
 import {DictionaryTypeService} from "../../service";
@@ -22,7 +29,9 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
 
   filterForm: FormGroup = new FormGroup({});
 
-  searchValue = '';
+  searchColumnName = ''
+  searchColumnKey = ''
+  searchColumnValue = '';
 
 
   constructor(private dictionaryTypeService: DictionaryTypeService, messageService: NzMessageService, private fb: FormBuilder) {
@@ -49,14 +58,14 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
     this.baseDTO = this.filterForm.value;
 
 
-    var createTimeRange: Date[] = this.filterForm.controls['createTimeRange'].value;
-    if (createTimeRange.length > 0) {
+    const createTimeRange: Date[] = this.filterForm.controls['createTimeRange'].value;
+    if (createTimeRange && createTimeRange.length > 0) {
       this.baseDTO.createTimeBegin = formatDate(createTimeRange[0])
       this.baseDTO.createTimeEnd = formatDate(createTimeRange[1])
     }
 
-    var updateTimeRange: Date[] = this.filterForm.controls['updateTimeRange'].value;
-    if (updateTimeRange.length > 0) {
+    const updateTimeRange: Date[] = this.filterForm.controls['updateTimeRange'].value;
+    if (updateTimeRange &&updateTimeRange.length > 0) {
       this.baseDTO.updateTimeBegin = formatDate(updateTimeRange[0])
       this.baseDTO.updateTimeEnd = formatDate(updateTimeRange[1])
     }
@@ -78,6 +87,44 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
 
   handleDataRefresh(event: any) {
     console.log('event: ', event);
+    this.reloadData();
+  }
+
+  showFilterFlag = false
+  @ViewChild("sp", {static: true}) cc!: TemplateRef<void>;
+
+  showFilter() {
+    this.showFilterFlag = true;
+  }
+
+  changeColumnName(i: number) {
+    this.searchColumnName = this.columnItems[i].name
+    this.searchColumnKey = this.columnItems[i].key
+
+  }
+
+  /**
+   * 处理字段过滤器搜索
+   * @param event
+   */
+  handleFilterSearch(event: { column: string; searchValue: string }) {
+    console.log('$event: ', event);
+
+    // 重置筛选对象
+    this.baseDTO = new DictionaryTypeDTO();
+
+    // for (let eventKey in event) {
+    //   if (event.hasOwnProperty(eventKey)) {
+    //     var eventValue = event[eventKey];
+    //
+    //   }
+    // }
+
+    var arr = Object.entries(event);
+    // this.baseDTO[arr[0][1]] = arr[1][1]
+    this.baseDTO[event.column] = event.searchValue
+
+    console.log('this.baseDTO: ', this.baseDTO);
     this.reloadData();
   }
 }

@@ -5,7 +5,9 @@
     <button nz-button (click)="goAddDatum()" nzType="primary">添加</button>
     <button nz-button (click)="reloadData()" nzType="primary">刷新</button>
     <button nz-button (click)="reloadData()" nzType="primary">修改</button>
-    <button *ngIf="checkedIds.size!=0" nz-button (click)="deleteData(checkedIds)" nzDanger nzType="primary">删除选中的【{{checkedIds.size}}】条记录</button>
+    <button *ngIf="checkedIds.size!=0" nz-button (click)="deleteData(checkedIds)" nzDanger nzType="primary">
+      删除选中的【{{checkedIds.size}}】条记录
+    </button>
   </div>
 
   <!--顶部过滤组-->
@@ -35,7 +37,7 @@
           <nz-form-item>
             <nz-form-label>更新时间</nz-form-label>
             <nz-form-control>
-              <nz-range-picker  formControlName="updateTimeRange"></nz-range-picker>
+              <nz-range-picker formControlName="updateTimeRange"></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -43,8 +45,8 @@
       <div nz-row>
         <nz-form-item>
           <nz-form-control>
-            <button nz-button nzType="primary">重置</button>
-            <button nz-button  type="submit" nzType="primary">搜索</button>
+            <button nz-button type="reset" nzType="primary">重置</button>
+            <button nz-button type="submit" nzType="primary">搜索</button>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -53,7 +55,7 @@
   </div>
 </div>
 
-
+<!--数据表格-->
 <nz-table
   nzTitle="字典分类管理"
   nzBordered
@@ -66,34 +68,51 @@
   [nzLoading]="loading"
   (nzQueryParams)="onQueryParamsChange($event)"
 >
+  <!--表头-->
   <thead>
   <tr>
-    <th      [nzAlign]="'center'"
-             [nzSelections]="selectedData"
-             [nzChecked]="checked"
-             [nzIndeterminate]="indeterminate"
-             nzShowRowSelection="false"
-             [nzSelections]="idSelection"
-             (nzCheckedChange)="onAllCheckedChange($event)">
+    <th [nzAlign]="'center'"
+        [nzSelections]="selectedData"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        nzShowRowSelection="false"
+        [nzSelections]="idSelection"
+        (nzCheckedChange)="onAllCheckedChange($event)">
 
     </th>
-    <th [nzAlign]="'center'" *ngFor="let columnItem of columnItems"
-        [nzColumnKey]="columnItem.key"
-    >{{columnItem.name}}</th>
+    <th>
+      沃日
+<!--        <span nz-icon nzType="search" nz-popover (mouseover)="changeFilterName()" [nzPopoverContent]="sp"></span>-->
+<!--        <span nz-icon nzType="search" nz-popover [nzPopoverContent]="menu"></span>-->
+<!--        <ng-container ng *ngTemplateOutlet="menu"></ng-container>-->
+<!--        <div *ngIf="!showFilterFlag else menu"></div>-->
+    </th>
+    <th [nzAlign]="'center'" *ngFor="let columnItem of columnItems;let i=index;"
+        [nzColumnKey]="columnItem.key" [nzFilterFn]="true" [nzSortFn]="true"
+    >
+      {{columnItem.name}}
+      <span nz-icon nzType="search" nz-popover (mouseover)="changeColumnName(i)" [nzPopoverContent]="sp"></span>
+<!--      <div>-->
+<!--        <ng-container *ngTemplateOutlet="hehe"></ng-container>-->
+<!--      </div>-->
+    </th>
     <th [nzAlign]="'center'">操作</th>
   </tr>
   </thead>
+  <!--表体-->
   <tbody>
   <tr *ngFor="let datum of data">
     <td
-            [nzAlign]="'center'"
-            [nzChecked]="checkedIds.has(datum.id!!)"
-            (nzCheckedChange)="onDatumCheckedChange(datum.id!!, $event)"
+      [nzAlign]="'center'"
+      [nzChecked]="checkedIds.has(datum.id!!)"
+      (nzCheckedChange)="onDatumCheckedChange(datum.id!!, $event)"
     ></td>
+    <td></td>
     <td [nzAlign]="'center'" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]}}</td>
     <td [nzAlign]="'center'" nzAlign="center">
       <a nz-button nzType="link" (click)="goEditDatum(datum)">编辑</a>
-      <a nz-button nzType="link" (nzOnConfirm)="deleteDatum(datum.id)" nzDanger nz-popconfirm nzPopconfirmTitle="确定删除该项吗?" nzOkText="确定"
+      <a nz-button nzType="link" (nzOnConfirm)="deleteDatum(datum.id)" nzDanger nz-popconfirm
+         nzPopconfirmTitle="确定删除该项吗?" nzOkText="确定"
          nzCancelText="取消">删除</a>
     </td>
   </tr>
@@ -107,22 +126,29 @@
 </ng-template>
 
 
-<nz-dropdown-menu #menu="nzDropdownMenu">
-  <div class="ant-table-filter-dropdown">
-    <div class="search-box">
-      <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue"/>
-      <button nz-button nzSize="small" nzType="primary" class="search-button">Search</button>
-      <button nz-button nzSize="small">Reset</button>
-    </div>
-  </div>
-</nz-dropdown-menu>
+
+
+<ng-template #menu>
+<!--    <div class="ant-table-filter-dropdown">-->
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchColumnValue"/>
+<!--        <span>{{}}</span>-->
+        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+        <button nz-button nzSize="small">Reset</button>
+      </div>
+<!--    </div>-->
+</ng-template>
+
+<ng-template #sp>
+  <app-column-filter  [columnName]="searchColumnName" [columnKey]="searchColumnKey"  (searchEmitter)="handleFilterSearch($event)"></app-column-filter>
+</ng-template>
 
 <!-- 新增/编辑数据的对话框 -->
 <nz-modal
-        [nzVisible]="modalVisible"
-        (nzOnCancel)="handleCancel()"
-        [nzFooter]=null
-        nzClosable="false"
+  [nzVisible]="modalVisible"
+  (nzOnCancel)="handleCancel()"
+  [nzFooter]=null
+  nzClosable="false"
 >
   <div *nzModalContent>
     <app-dictionary-type-form (dataRefresh)="handleDataRefresh($event)" [datum]="editDatum"></app-dictionary-type-form>

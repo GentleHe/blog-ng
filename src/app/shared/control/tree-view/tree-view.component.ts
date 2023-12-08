@@ -1,6 +1,7 @@
 import {CollectionViewer, DataSource, SelectionChange} from '@angular/cdk/collections';
 import {FlatTreeControl, TreeControl} from '@angular/cdk/tree';
-import {SelectionModel} from '@angular/cdk/collections';
+// import {SelectionModel} from '@angular/cdk/collections';
+import {SelectionModel} from "@angular/cdk/collections";
 import {AfterViewInit, EventEmitter, Component, OnInit, Output, OnDestroy} from '@angular/core';
 import {NzTreeFlatDataSource, NzTreeFlattener} from 'ng-zorro-antd/tree-view';
 import {BehaviorSubject, Observable, of, merge} from 'rxjs';
@@ -51,8 +52,8 @@ export class TreeViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   treeControl = new FlatTreeControl<FlatNode>(
-    node => node.level,
-    node => node.expandable
+      (node: { level: any; }) => node.level,
+      (node: { expandable: any; }) => node.expandable
   );
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);

@@ -9,9 +9,13 @@ import {NzTableModule} from "ng-zorro-antd/table";
 import {BaseComponent, PageNotFoundComponent} from './components';
 import {NzModalModule} from "ng-zorro-antd/modal";
 import {NzFormModule} from "ng-zorro-antd/form";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BaseFormComponent } from './components';
 import {SharedRoutingModule} from "./shared-routing.module";
+import { ColumnFilterComponent } from './control/column-filter/column-filter.component';
+import {NzInputModule} from "ng-zorro-antd/input";
+import {NzUploadModule} from "ng-zorro-antd/upload";
+import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
 
 
 
@@ -20,11 +24,20 @@ import {SharedRoutingModule} from "./shared-routing.module";
     PageNotFoundComponent,
     BaseComponent,
     BaseFormComponent,
+    ColumnFilterComponent,
+    // TreeViewComponent,
+    // CommonUploadComponent,
+    // IconViewComponent,
+    // DataTreeSelectComponent,
   ],
   imports: [
     CommonModule,
     NzTableModule,
-    SharedRoutingModule
+    SharedRoutingModule,
+    NzInputModule,
+    FormsModule,
+    NzUploadModule,
+    NzTreeViewModule
   ],
   exports: [
     NzLayoutModule,
@@ -36,6 +49,7 @@ import {SharedRoutingModule} from "./shared-routing.module";
     NzModalModule,
     NzFormModule,
     ReactiveFormsModule,
+    ColumnFilterComponent,
   ]
 })
 export class SharedModule {
