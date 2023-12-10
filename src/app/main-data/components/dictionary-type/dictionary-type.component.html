@@ -4,7 +4,6 @@
   <div class="top-group-operation">
     <button nz-button (click)="goAddDatum()" nzType="primary">添加</button>
     <button nz-button (click)="reloadData()" nzType="primary">刷新</button>
-    <button nz-button (click)="reloadData()" nzType="primary">修改</button>
     <button *ngIf="checkedIds.size!=0" nz-button (click)="deleteData(checkedIds)" nzDanger nzType="primary">
       删除选中的【{{checkedIds.size}}】条记录
     </button>
@@ -65,6 +64,7 @@
   [nzPageSize]="pageSize"
   [nzPageIndex]="pageIndex"
   [nzShowSizeChanger]="true"
+  [nzShowTotal]="showTotalTemplate"
   [nzLoading]="loading"
   (nzQueryParams)="onQueryParamsChange($event)"
 >
@@ -80,21 +80,13 @@
         (nzCheckedChange)="onAllCheckedChange($event)">
 
     </th>
-    <th>
-      沃日
-<!--        <span nz-icon nzType="search" nz-popover (mouseover)="changeFilterName()" [nzPopoverContent]="sp"></span>-->
-<!--        <span nz-icon nzType="search" nz-popover [nzPopoverContent]="menu"></span>-->
-<!--        <ng-container ng *ngTemplateOutlet="menu"></ng-container>-->
-<!--        <div *ngIf="!showFilterFlag else menu"></div>-->
-    </th>
     <th [nzAlign]="'center'" *ngFor="let columnItem of columnItems;let i=index;"
         [nzColumnKey]="columnItem.key" [nzFilterFn]="true" [nzSortFn]="true"
     >
       {{columnItem.name}}
-      <span nz-icon nzType="search" nz-popover (mouseover)="changeColumnName(i)" [nzPopoverContent]="sp"></span>
-<!--      <div>-->
-<!--        <ng-container *ngTemplateOutlet="hehe"></ng-container>-->
-<!--      </div>-->
+<!--      <nz-filter-trigger [nzVisible]="true" [nzActive]="true" [nzDropdownMenu]="menu">-->
+        <span *ngIf="columnItem.showFilter" nz-icon nzType="search" nz-popover (mouseover)="changeColumnName(i)" [nzPopoverContent]="sp"></span>
+<!--      </nz-filter-trigger>-->
     </th>
     <th [nzAlign]="'center'">操作</th>
   </tr>
@@ -107,7 +99,6 @@
       [nzChecked]="checkedIds.has(datum.id!!)"
       (nzCheckedChange)="onDatumCheckedChange(datum.id!!, $event)"
     ></td>
-    <td></td>
     <td [nzAlign]="'center'" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]}}</td>
     <td [nzAlign]="'center'" nzAlign="center">
       <a nz-button nzType="link" (click)="goEditDatum(datum)">编辑</a>
@@ -126,18 +117,16 @@
 </ng-template>
 
 
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" />
+      <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+      <button nz-button nzSize="small" >Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
 
-
-<ng-template #menu>
-<!--    <div class="ant-table-filter-dropdown">-->
-      <div class="search-box">
-        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchColumnValue"/>
-<!--        <span>{{}}</span>-->
-        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
-        <button nz-button nzSize="small">Reset</button>
-      </div>
-<!--    </div>-->
-</ng-template>
 
 <ng-template #sp>
   <app-column-filter  [columnName]="searchColumnName" [columnKey]="searchColumnKey"  (searchEmitter)="handleFilterSearch($event)"></app-column-filter>
@@ -151,7 +140,7 @@
   nzClosable="false"
 >
   <div *nzModalContent>
-    <app-dictionary-type-form (dataRefresh)="handleDataRefresh($event)" [datum]="editDatum"></app-dictionary-type-form>
+    <app-dictionary-type-form (dataRefresh)="handleDataRefresh($event)" [isCreate]="!editDatum" [datum]="editDatum"></app-dictionary-type-form>
   </div>
 
 </nz-modal>

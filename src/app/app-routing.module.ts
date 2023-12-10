@@ -7,7 +7,7 @@ const routes: Routes = [
   {path:'', component: HomeContainerComponent, loadChildren: () => import('./home').then(m => m.HomeModule)},
   {path:'system', component:HomeContainerComponent, loadChildren: ()=>import('./system').then((m => m.SystemModule))},
   {path:'shared', component:HomeContainerComponent, loadChildren: ()=>import('./shared').then((m => m.SharedModule))},
-  {path:'main-data', component:NoSiderContainerComponent, loadChildren: ()=>import('./main-data').then((m => m.MainDataModule))},
+  {path:'main-data', component:HomeContainerComponent, loadChildren: ()=>import('./main-data').then((m => m.MainDataModule))},
   {path:'other', component:HomeContainerComponent, loadChildren: ()=>import('./other').then((m => m.OtherModule))},
   {path:'**', redirectTo: 'shared/404'},
 ];

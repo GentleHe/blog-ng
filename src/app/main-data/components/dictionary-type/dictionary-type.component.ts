@@ -42,11 +42,12 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
   override ngOnInit() {
     // 表格字段声明
     this.columnItems = quickAddIdItem(this.columnItems);
-    this.columnItems.push(new ColumnItem("字典分类key", 'type'));
+    this.columnItems.push(new ColumnItem("字典分类key", 'type').setFilterShow());
     this.columnItems.push(new ColumnItem("字典分类标签", 'label'));
-    this.columnItems.push(new ColumnItem("字典分类描述", 'description'));
+    this.columnItems.push(new ColumnItem("字典分类描述", 'description').setFilterShow());
     this.columnItems.push(new ColumnItem("是否内置", 'builtIn'));
     this.columnItems = quickAddBasicItem(this.columnItems)
+
 
     // 筛选表单组件声明
     this.filterForm.addControl('labelLike', this.fb.control(''))
@@ -88,13 +89,6 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
   handleDataRefresh(event: any) {
     console.log('event: ', event);
     this.reloadData();
-  }
-
-  showFilterFlag = false
-  @ViewChild("sp", {static: true}) cc!: TemplateRef<void>;
-
-  showFilter() {
-    this.showFilterFlag = true;
   }
 
   changeColumnName(i: number) {

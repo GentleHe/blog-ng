@@ -32,6 +32,7 @@ export class BaseDTO {
   updateTime?: number;
   createBy?: string;
   updateBy?: string;
+
   // 字符串的索引签名，这样的话就能允许  this.baseDTO['createBy']='hgf'的方式来给createBy赋值了
   [key: string]: any;
 }
@@ -55,6 +56,10 @@ export class ColumnItem {
   filters: Array<{ text: string; value: any }> = [];
   filterMultiple: boolean = false;
 
+  setFilterShow(): ColumnItem {
+    this.showFilter = true;
+    return this
+  }
 
   constructor(name: string, key: string) {
     this.name = name;
@@ -82,7 +87,7 @@ export function quickAddBasicItem(columnItems: ColumnItem[]): ColumnItem[] {
   return columnItems;
 }
 
-export class SelectTree implements NzTreeNodeOptions{
+export class SelectTree implements NzTreeNodeOptions {
   [key: string]: NzSafeAny;
 
   key!: string;

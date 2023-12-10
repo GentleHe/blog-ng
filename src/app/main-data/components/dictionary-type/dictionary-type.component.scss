@@ -1,7 +1,12 @@
 .top-group {
-  border: #abc4de 1px dashed;
+  //border: #abc4de 1px dashed;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
+
+  .top-group-operation{
+
+  }
 
 
   .top-group-filter {
@@ -17,4 +22,6 @@
   button {
     margin-right: 1rem;
   }
+
+
 }

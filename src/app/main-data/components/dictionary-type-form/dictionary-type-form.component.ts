@@ -37,7 +37,7 @@ export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTyp
         super(new DictionaryTypeDTO(), fb, dictionaryTypeService, message);
 
         this.validateForm = this.fb.group({
-            id: new FormControl({value: '保存后自动生成', disabled: false}),
+            id: new FormControl({value: '', disabled: false}),
             // key: ['', [Validators.required]],
             // value: ['', [Validators.required]],
             // description: ['', [Validators.required]],

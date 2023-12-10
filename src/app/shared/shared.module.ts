@@ -12,10 +12,11 @@ import {NzFormModule} from "ng-zorro-antd/form";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BaseFormComponent } from './components';
 import {SharedRoutingModule} from "./shared-routing.module";
-import { ColumnFilterComponent } from './control/column-filter/column-filter.component';
+import { ColumnFilterComponent } from './control';
 import {NzInputModule} from "ng-zorro-antd/input";
 import {NzUploadModule} from "ng-zorro-antd/upload";
 import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
+import {NzDropDownModule} from "ng-zorro-antd/dropdown";
 
 
 
@@ -30,15 +31,16 @@ import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
     // IconViewComponent,
     // DataTreeSelectComponent,
   ],
-  imports: [
-    CommonModule,
-    NzTableModule,
-    SharedRoutingModule,
-    NzInputModule,
-    FormsModule,
-    NzUploadModule,
-    NzTreeViewModule
-  ],
+    imports: [
+        CommonModule,
+        NzTableModule,
+        SharedRoutingModule,
+        NzInputModule,
+        FormsModule,
+        NzUploadModule,
+        NzTreeViewModule,
+        NzDropDownModule
+    ],
   exports: [
     NzLayoutModule,
     NzBreadCrumbModule,

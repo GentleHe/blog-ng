@@ -13,7 +13,7 @@
 
 <div>
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-        <nz-form-item>
+        <nz-form-item *ngIf="!isCreate">
             <nz-form-label [nzSpan]="6">字典分类编号</nz-form-label>
             <nz-form-control>
                 <input readonly nz-input formControlName="id"/>

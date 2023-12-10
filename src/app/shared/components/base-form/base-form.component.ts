@@ -117,7 +117,7 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
     [p: string]: boolean
   }))[] | undefined;
   @Input() datum: any;
-  isCreate = true;
+  @Input() isCreate!: boolean;
   operationFinished = new EventEmitter();
   quickFill = true;
   validateForm!: FormGroup;
@@ -210,11 +210,11 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
 
   ngAfterViewChecked() {
     // 标识创建还是编辑模式
-    if (this.datum) {
-      this.isCreate = false
-    } else {
-      this.isCreate = true
-    }
+    // if (this.datum) {
+    //   this.isCreate = false
+    // } else {
+    //   this.isCreate = true
+    // }
   }
 
 
@@ -306,14 +306,16 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
           this.dataRefresh.emit(0);
         }
       }, error: error => {
-        console.log('error: ', error.error);
+        // if (error.error.message) {
+        //   this.message.create('error', error.error.message);
+        // } else {
+        //   this.message.create('error', '操作失败')
+        // }
 
-        if (error.error.message) {
-          this.message.create('error', error.error.message);
-        } else {
-          this.message.create('error', '操作失败')
-        }
+        this.loading = false
+        throw error
       }, complete: () => {
+        console.log('正常完成后执行的代码');
         this.loading = false
       }
     });
