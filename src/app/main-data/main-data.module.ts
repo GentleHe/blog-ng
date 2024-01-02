@@ -14,11 +14,12 @@ import {SharedModule} from "../shared";
 import { NoSiderContainerComponent } from './components/no-sider-container/no-sider-container.component';
 import {NzDropDownModule} from "ng-zorro-antd/dropdown";
 import {NzPopconfirmModule} from "ng-zorro-antd/popconfirm";
-import { DictionaryTypeFormComponent } from './components/dictionary-type-form/dictionary-type-form.component';
+import { DictionaryTypeFormComponent } from './components';
 import {NzCheckboxModule} from "ng-zorro-antd/checkbox";
 import {NzRadioModule} from "ng-zorro-antd/radio";
 import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzPopoverModule} from "ng-zorro-antd/popover";
+import {NzUploadModule} from "ng-zorro-antd/upload";
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import {NzPopoverModule} from "ng-zorro-antd/popover";
         NzCheckboxModule,
         NzRadioModule,
         NzDividerModule,
-        NzPopoverModule
+        NzPopoverModule,
+        NzUploadModule
     ]
 })
 export class MainDataModule { }

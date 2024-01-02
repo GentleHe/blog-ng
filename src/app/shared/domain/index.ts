@@ -39,11 +39,14 @@ export class BaseDTO {
 
 
 export class BaseVO {
-  id?: number;
+  id!: number;
   createTime?: number;
   updateTime?: number;
   createBy?: string;
   updateBy?: string;
+
+  // 字符串的索引签名，这样的话就能允许  this.baseDTO['createBy']='hgf'的方式来给createBy赋值了
+  [key: string]: any;
 }
 
 export class ColumnItem {

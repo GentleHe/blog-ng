@@ -4,6 +4,18 @@
   <div class="top-group-operation">
     <button nz-button (click)="goAddDatum()" nzType="primary">添加</button>
     <button nz-button (click)="reloadData()" nzType="primary">刷新</button>
+    <button nz-button (click)="doExport()" nzType="primary">导出</button>
+    <nz-upload
+      nzAction="{{this.baseService.getImportDataUrl()}}"
+      [nzHeaders]="{ authorization: 'authorization-text' }"
+      [nzShowUploadList]="false"
+      (nzChange)="handleImportProgress($event)"
+    >
+      <button nz-button>
+        <span nz-icon nzType="upload"></span>
+        导入
+      </button>
+    </nz-upload>
     <button *ngIf="checkedIds.size!=0" nz-button (click)="deleteData(checkedIds)" nzDanger nzType="primary">
       删除选中的【{{checkedIds.size}}】条记录
     </button>
@@ -102,7 +114,7 @@
     <td [nzAlign]="'center'" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]}}</td>
     <td [nzAlign]="'center'" nzAlign="center">
       <a nz-button nzType="link" (click)="goEditDatum(datum)">编辑</a>
-      <a nz-button nzType="link" (nzOnConfirm)="deleteDatum(datum.id)" nzDanger nz-popconfirm
+      <a nz-button nzType="link" (nzOnConfirm)="deleteDatum(datum.id!)" nzDanger nz-popconfirm
          nzPopconfirmTitle="确定删除该项吗?" nzOkText="确定"
          nzCancelText="取消">删除</a>
     </td>

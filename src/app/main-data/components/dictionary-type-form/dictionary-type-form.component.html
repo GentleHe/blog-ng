@@ -19,8 +19,8 @@
                 <input readonly nz-input formControlName="id"/>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item *ngFor="let control of listOfControl;let i = index;">
-            <nz-form-label nzRequired [nzSpan]="6">{{control.controlLabel}}</nz-form-label>
+        <nz-form-item *ngFor="let control of controls;let i = index;">
+            <nz-form-label [nzSpan]="6">{{control.controlLabel}}</nz-form-label>
             <nz-form-control [nzHasFeedback]="true">
                 <input nz-input [formControlName]="control.controlKey"/>
             </nz-form-control>

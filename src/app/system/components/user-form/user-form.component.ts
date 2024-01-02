@@ -1,4 +1,13 @@
-import {Component, Input, OnChanges, OnInit, Output, SimpleChanges, EventEmitter} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  EventEmitter,
+  ChangeDetectorRef
+} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
 import {UserService} from '../../services';
@@ -14,8 +23,8 @@ import {BaseFormComponent} from '../../../shared';
 })
 export class UserFormComponent extends BaseFormComponent<User> implements OnInit, OnChanges {
 
-  constructor(fb: FormBuilder, private userService: UserService, message: NzMessageService) {
-    super(new User(), fb, userService, message);
+  constructor(fb: FormBuilder, cd: ChangeDetectorRef, private userService: UserService, message: NzMessageService) {
+    super(new User(), fb, cd, userService, message);
 
     this.validateForm = this.fb.group({
       id: [''],
@@ -40,26 +49,26 @@ export class UserFormComponent extends BaseFormComponent<User> implements OnInit
     new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
 
-        this.userService.columnDataExists('username', control.value).subscribe(x => {
-          console.log(JSON.stringify(x));
-          if (x.status === 0) {
-            // 服务器中不存在
-            if (x.data !== true) {
-              observer.next(null);
-            }else{
-              // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
-              if (this.isCreate || !this.isCreate && control.value !== this.datum.username) {
-                observer.next({error: true, duplicated: true});
-              }
-              else {
-                observer.next(null);
-              }
-            }
-          }else{
-            observer.next({error: true});
-          }
-          observer.complete();
-        });
+        // this.userService.columnDataExists('username', control.value).subscribe(x => {
+        //   console.log(JSON.stringify(x));
+        //   if (x.status === 0) {
+        //     // 服务器中不存在
+        //     if (x.data !== true) {
+        //       observer.next(null);
+        //     }else{
+        //       // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
+        //       if (this.isCreate || !this.isCreate && control.value !== this.datum.username) {
+        //         observer.next({error: true, duplicated: true});
+        //       }
+        //       else {
+        //         observer.next(null);
+        //       }
+        //     }
+        //   }else{
+        //     observer.next({error: true});
+        //   }
+        //   observer.complete();
+        // });
 
       }, 100);
     })

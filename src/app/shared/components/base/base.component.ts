@@ -4,6 +4,7 @@ import {BaseService} from "../../services";
 import {NzTableFilterValue, NzTableQueryParams, NzTableSortFn, NzTableSortOrder} from "ng-zorro-antd/table";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {isRequestSuccess} from "../../functions";
+import {catchError, Observable, switchMap} from "rxjs";
 
 
 export interface BaseComponentInterface<DTO extends BaseDTO, VO extends BaseVO> {
@@ -21,6 +22,7 @@ export interface BaseComponentInterface<DTO extends BaseDTO, VO extends BaseVO> 
    * @param params 查询参数
    */
   onQueryParamsChange(params: NzTableQueryParams): void
+
 }
 
 
@@ -254,4 +256,43 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
 
     })
   }
+
+
+  /**
+   * 导出
+   */
+  doExport(){
+    console.log('导出');
+    this.baseService.exportData(this.pageable, this.baseDTO).pipe(
+      switchMap(response => {
+        // 将响应数据转换为Blob对象
+        // const blob = new Blob([response.data], { type: response.headers.get('Content-Type') });
+        return new Observable(observer=>{
+          // 创建一个下载链接并触发下载
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(response);
+          link.download = 'file.ext'; // 文件名
+          link.click();
+          observer.next(true); // 通知完成
+          observer.complete(); // 完成Observable
+        });
+      })
+
+      // catchError(error => {
+      //   console.error('下载失败:', error);
+      // })
+    ).subscribe(x=>{
+
+    });
+  }
+
+  /**
+   * 处理导入进度
+   * @param event
+   */
+  handleImportProgress(event: any){
+    console.log('上传操作', event);
+  }
+
+
 }

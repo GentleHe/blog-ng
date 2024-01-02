@@ -6,7 +6,7 @@ export const REQUEST_OK = 200;
  */
 export enum RESPONSE_CODE{
   Success = 200,
-  NotAuthorized = 404,
+  NotAuthorized = 401,
   NotFound = 404,
   Error = 500,
 }

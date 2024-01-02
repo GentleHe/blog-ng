@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BaseDTO, BaseVO, Pageable, Result} from "../domain";
-import {Observable} from "rxjs";
+import {Observable, switchMap} from "rxjs";
 import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 
@@ -74,7 +74,7 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
   }
 
   columnDataExists(columnName: string, columnValue: any): Observable<Result> {
-    const url = `${this.baseUrl}/hasExists`;
+    const url = `${this.baseUrl}${this.serviceName}/columnValueIsExists`;
 
     let params = new HttpParams()
       .append('column', columnName)
@@ -155,8 +155,62 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
     const param = new HttpParams({fromString: JSON.stringify(data)})
     var headers = new HttpHeaders()
     headers = headers.append("Content-Type", "application/json")
-    return this.http.put<Result>(`${this.baseUrl}${this.serviceName}/${data.id}`, data,{headers});
+    return this.http.put<Result>(`${this.baseUrl}${this.serviceName}/${data.id}`, data, {headers});
   }
 
 
+  /**
+   * 导出数据，提供分页参数和过滤参数
+   * 此方法目前和查询方法逻辑保持一致，导出仅仅是把查询的数据从页面显示改为变成excel而已
+   * @param pageable
+   * @param baseDTO
+   */
+  exportData(pageable: Pageable, baseDTO: DTO) {
+    let params = new HttpParams()
+      .append('size', pageable.size)
+      .append('page', pageable.page)
+
+    for (let sortElement of pageable.sort) {
+      if (sortElement.value) {
+        params = params.append('sort', `${sortElement.key},${sortElement.value === 'ascend' ? 'asc' : 'desc'}`)
+      }
+    }
+
+
+    for (let filterElement of pageable.filter) {
+      if (filterElement.value !== null) {
+        if (filterElement.value instanceof Array && filterElement.value.length > 0) {
+          console.log(`filterElement.value: ${filterElement.value}`);
+          params = params.append(filterElement.key, filterElement.value[0]);
+        } else {
+          console.log(`filterElement.value1: ${filterElement.value}`);
+          params = params.append(filterElement.key, filterElement.value);
+        }
+
+      }
+    }
+
+
+    console.log(pageable)
+    console.log('params: ' + JSON.stringify(params.keys()))
+
+
+    var body = baseDTO;
+
+    var headers = new HttpHeaders()
+    headers = headers.append("Content-Type", "application/octet-stream")
+    // headers = headers.append("Response-Type", "blob")
+
+    console.log(headers);
+    console.log('body: ', body);
+    var resultObservable = this.http.get(`${this.baseUrl}${this.serviceName}/export`, {
+      responseType: 'blob'
+    })
+
+    return resultObservable;
+  }
+
+  getImportDataUrl = () => {
+    return this.baseUrl + this.serviceName + '/import'
+  }
 }

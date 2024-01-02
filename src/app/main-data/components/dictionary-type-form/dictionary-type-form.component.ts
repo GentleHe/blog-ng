@@ -1,17 +1,23 @@
-import {Component} from '@angular/core';
-import {BaseFormComponent} from "../../../shared";
+import {ChangeDetectorRef, Component} from '@angular/core';
+import {BaseStringControl, BaseFormComponent} from "../../../shared";
 import {DictionaryTypeDTO} from "../../domain";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../../system/services";
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators
+} from "@angular/forms";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {User} from "../../../system/domain";
 import {DictionaryTypeService} from "../../service";
+import {debounceTime, firstValueFrom} from "rxjs";
 
 
 export class DictionaryTypeValidateForm extends FormGroup {
 
 
 }
+
+
 
 @Component({
     selector: 'app-dictionary-type-form',
@@ -20,21 +26,8 @@ export class DictionaryTypeValidateForm extends FormGroup {
 })
 export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTypeDTO> {
 
-    listOfControl: Array<{ controlLabel: string, controlKey: string, required: boolean }> = []
-
-
-
-    // override validateForm: FormGroup<{
-    //     id: FormControl<number|null>,
-    //     key: FormControl<string|null>,
-    //     value: FormGroup<string>,
-    //     description: FormGroup<string>,
-    //     lockFlag: FormGroup<boolean>,
-    //     status: FormGroup<string>,
-    // }>
-
-    constructor(fb: FormBuilder, private dictionaryTypeService: DictionaryTypeService, message: NzMessageService) {
-        super(new DictionaryTypeDTO(), fb, dictionaryTypeService, message);
+    constructor(fb: FormBuilder, cd: ChangeDetectorRef, private dictionaryTypeService: DictionaryTypeService, message: NzMessageService) {
+        super(new DictionaryTypeDTO(), fb, cd, dictionaryTypeService, message);
 
         this.validateForm = this.fb.group({
             id: new FormControl({value: '', disabled: false}),
@@ -45,21 +38,48 @@ export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTyp
             // status: ['', [Validators.required]],
         })
 
-        this.listOfControl.push({controlKey: 'type', controlLabel: '字典分类key', required: true})
-        this.listOfControl.push({controlKey: 'label', controlLabel: '字典分类标签', required: true})
-        this.listOfControl.push({controlKey: 'description', controlLabel: '字典分类描述', required: false})
+        // this.controls.push(new BaseControl('id', '编号',  [Validators.required],[]))
+        this.controls.push(new BaseStringControl('type', '字典分类key',  [Validators.required],[]))
+        this.controls.push(new BaseStringControl('label', '字典分类标签',  [Validators.required],[]))
+        this.controls.push(new BaseStringControl('description', '字典分类描述',[Validators.required],[]))
+        // this.controls.push(new BaseControl('builtIn', '系统内置',[Validators.required],[]))
 
-        for (let control of this.listOfControl) {
+        for (let control of this.controls) {
             this.validateForm.addControl(control.controlKey, this.fb.control(''))
 
-          if (control.required) {
-            this.validateForm.controls[control.controlKey].addValidators(Validators.required)
-          }
+            // 添加同步验证器（改变立刻验证）
+            if (control.validators) {
+                for (let validator of control.validators) {
+                    this.validateForm.controls[control.controlKey].addValidators(validator)
+                }
+            }
+            // 异步验证器（提交时验证）
+            if (control.asyncValidators) {
+                for (let asyncValidator of control.asyncValidators) {
+                    this.validateForm.controls[control.controlKey].addAsyncValidators(asyncValidator)
+                }
+            }
         }
+
         this.validateForm.addControl('builtIn', this.fb.control('false'))
 
-        this.validateForm.controls['type'].addValidators(Validators.required)
+        this.validateForm.controls['type'].valueChanges.pipe(debounceTime(500)).subscribe(()=>{
+            console.log('执行一次操作');
 
+            // this.columnValueExist(this.validateForm.controls['type'])
+
+
+            var typeControl = this.validateForm.controls['type'];
+            this.columnValueExist(typeControl).then(result=>{
+                console.log('result: ', result);
+                if (result && result.error) {
+                    typeControl.invalid
+                    typeControl.setErrors(result)
+                }
+            })
+
+
+        })
 
         console.log('this.validateForm: ', this.validateForm);
     }
@@ -85,5 +105,7 @@ export class DictionaryTypeFormComponent extends BaseFormComponent<DictionaryTyp
 
         // 触发父类的后续的逻辑
         super.initForm();
+
+        this.cd.detectChanges()
     }
 }

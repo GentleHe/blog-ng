@@ -20,9 +20,9 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   handleError(error: Error): void {
-    // console.log('******************');
-    // console.error(error);
-    // console.log('******************');
+    console.log('******************');
+    console.error(error);
+    console.log('******************');
 
     // this.message.error(error.message);
     // console.log(`${JSON.stringify(error)}`);

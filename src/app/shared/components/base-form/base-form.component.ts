@@ -1,6 +1,6 @@
 import {
   AfterViewChecked,
-  AfterViewInit,
+  AfterViewInit, ChangeDetectorRef,
   Component,
   EventEmitter,
   Inject,
@@ -8,12 +8,21 @@ import {
   OnInit, Output,
   SimpleChanges
 } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ValidationErrors} from "@angular/forms";
-import {observable, Observable, Observer} from "rxjs";
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn
+} from "@angular/forms";
+import {firstValueFrom, observable, Observable, Observer} from "rxjs";
 import {BaseService} from "../../services";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {BaseDTO} from "../../domain";
+import {BaseDTO, BaseVO} from "../../domain";
 import {isRequestSuccess} from "../../functions";
+import {RESPONSE_CODE} from "../../constant";
 
 export interface BaseFormInterface<T> {
 
@@ -38,10 +47,6 @@ export interface BaseFormInterface<T> {
   datum: T;
 
   operationFinished: EventEmitter<T>;
-
-  columnAsyncValidators: ((control: FormControl) => (Observable<ValidationErrors | null> | {
-    [s: string]: boolean
-  }))[] | undefined;
 
   /**
    * 提交表单前的操作，把表单数据映射到编辑数据上
@@ -93,29 +98,55 @@ export interface BaseFormInterface<T> {
   quickFillColumnChange(value: any): void;
 }
 
+export class BaseStringControl {
+  controlLabel!: string;
+  controlKey!: string;
+  validators?: ValidatorFn[] = []
+  asyncValidators?: AsyncValidatorFn[] = []
+
+
+  constructor(controlKey: string, controlLabel: string, validators: ValidatorFn[], asyncValidators: AsyncValidatorFn[]) {
+    this.controlKey = controlKey;
+    this.controlLabel = controlLabel;
+    this.validators = validators;
+    this.asyncValidators = asyncValidators;
+  }
+
+  addValidators(validator: ValidatorFn) {
+    if (!this.validators) {
+      this.validators = []
+    }
+    this.validators.push(validator)
+  }
+}
+
 @Component({
   selector: 'app-base-form',
   templateUrl: './base-form.component.html',
   styleUrls: ['./base-form.component.css']
 })
-export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInterface<T>, AfterViewChecked {
+export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInterface<T>, AfterViewChecked, AfterViewInit {
 
   /**
    * 载入标识
    */
   loading = false;
 
+  /**
+   * 控件列表
+   */
+  controls: Array<BaseStringControl> = []
+
   constructor(@Inject({providerIn: 'root'}) protected initData: T, protected fb: FormBuilder,
-              protected baseService: BaseService<T, T>, protected message: NzMessageService) {
+              protected cd: ChangeDetectorRef,
+              protected baseService: BaseService<T, BaseVO>, protected message: NzMessageService) {
   }
 
   ngOnInit(): void {
     this.initForm();
   }
 
-  columnAsyncValidators: ((control: FormControl) => (Observable<ValidationErrors | null> | {
-    [p: string]: boolean
-  }))[] | undefined;
+
   @Input() datum: any;
   @Input() isCreate!: boolean;
   operationFinished = new EventEmitter();
@@ -140,27 +171,101 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
     return new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
         // todo
-        this.baseService.columnDataExists(columnName, control.value).subscribe(x => {
-          if (x.status === 0) {
-            // 服务器中不存在
-            if (!x.data) {
-              observer.next(null);
-            } else {
-              // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
-              if (this.isCreate || !this.isCreate && control.value !== originValue) {
-                observer.next({error: true, duplicated: true});
-              } else {
-                observer.next(null);
-              }
-            }
-          } else {
-            observer.next({error: true});
-          }
-          observer.complete();
-        })
+        // this.baseService.columnDataExists(columnName, control.value).subscribe(x => {
+        //   if (x.status === 0) {
+        //     // 服务器中不存在
+        //     if (!x.data) {
+        //       observer.next(null);
+        //     } else {
+        //       // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
+        //       if (this.isCreate || !this.isCreate && control.value !== originValue) {
+        //         observer.next({error: true, duplicated: true});
+        //       } else {
+        //         observer.next(null);
+        //       }
+        //     }
+        //   } else {
+        //     observer.next({error: true});
+        //   }
+        //   observer.complete();
+        // })
 
       }, 100);
     })
+  }
+
+  columnValueExist = async (control: AbstractControl): Promise<any> => {
+    console.log('???');
+    let controlKey = ''
+    // 找到控件所属的FormGroup为止
+    let parent = control.parent
+    while (parent && !(parent instanceof FormGroup)) {
+      parent = parent.parent
+    }
+
+    if (parent) {
+      const controls = parent.controls
+      for (let currentKey in controls) {
+        if (controls[currentKey] === control) {
+          controlKey = currentKey;
+          console.log('controlKey: ', controlKey);
+        }
+      }
+    }
+
+    var x = await firstValueFrom(this.baseService.columnDataExists(controlKey, control.value));
+
+      console.log('x: ', x);
+      // 请求失败，算重复
+      if (!isRequestSuccess(x)) {
+        return {error: true}
+      }
+
+      // 服务器中不存在
+      if (!x.data) {
+        return null;
+      }
+      // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
+      if (this.isCreate || control.value !== this.datum[controlKey]) {
+        return {error: true, duplicated: true}
+      } else {
+        return null;
+      }
+
+    // return x;
+
+
+    // firstValueFrom(this.baseService.columnDataExists(controlKey, control.value)).then(x=>{
+    //   console.log('请求结果: ' + x);
+    // })
+
+    // var resultPromise = await this.baseService.columnDataExists(controlKey, control.value);
+    // // resultPromise.then(x=>{
+    //   console.log('请求结果: ', resultPromise);
+    // // })
+    // resultPromise.subscribe(x=>{
+    //   console.log(x);
+    // })
+    // return resultPromise;
+
+    // this.baseService.columnDataExists(controlKey, control.value).subscribe(x => {
+    //   console.log('x: ', x);
+    //   // 请求失败，算重复
+    //   if (!isRequestSuccess(x)) {
+    //     return {error: true}
+    //   }
+    //
+    //   // 服务器中不存在
+    //   if (!x.data) {
+    //     return null;
+    //   }
+    //   // 服务器中存在的情况下，如果是新增模式肯定不行，如果是编辑模式，且不等于编辑对象的值也不行(因为不能占别人的名字吧)
+    //   if (this.isCreate || !this.isCreate && control.value !== control.getRawValue()) {
+    //     return {error: true, duplicated: true}
+    //   } else {
+    //     return null;
+    //   }
+    // })
   }
 
 
@@ -187,10 +292,10 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
      *
      * 遍历每个表单控件，将表单控件值标记为已改变，重新计算表单控件的值和验证状态
      */
-    for (const key of Object.keys(this.validateForm.controls)) {
-      this.validateForm.controls[key].markAsDirty();
-      this.validateForm.controls[key].updateValueAndValidity();
-    }
+    // for (const key of Object.keys(this.validateForm.controls)) {
+    //   this.validateForm.controls[key].markAsDirty();
+    //   this.validateForm.controls[key].updateValueAndValidity();
+    // }
 
     this.datum = JSON.parse(JSON.stringify(this.validateForm.value));
     console.log(`准备新增到服务器的数据: ${JSON.stringify(this.datum)}`);
@@ -208,13 +313,10 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
     this.afterInitForm();
   }
 
+  ngAfterViewInit() {
+  }
+
   ngAfterViewChecked() {
-    // 标识创建还是编辑模式
-    // if (this.datum) {
-    //   this.isCreate = false
-    // } else {
-    //   this.isCreate = true
-    // }
   }
 
 

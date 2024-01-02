@@ -14,6 +14,7 @@ import {DictionaryTypeService} from "../../service";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {Format} from "@angular-devkit/build-angular/src/builders/extract-i18n/schema";
 import {formatDate, formatDateTime} from "../../../shared/functions";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-dictionary-type',
@@ -121,4 +122,7 @@ export class DictionaryTypeComponent extends BaseComponent<DictionaryTypeDTO, Di
     console.log('this.baseDTO: ', this.baseDTO);
     this.reloadData();
   }
+
+
+  protected readonly environment = environment;
 }

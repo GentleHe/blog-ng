@@ -125,7 +125,7 @@
       (nzCheckedChange)="onDatumCheckedChange(datum.id!!, $event)"
     ></td>
 
-    <td nzAlign="center" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]}}</td>
+    <td nzAlign="center" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]!}}</td>
 
     <!--        <td nzLeft nzAlign="center">{{datum.id}}</td>-->
     <!--        <td nzLeft nzAlign="center">{{datum.name}}</td>-->
