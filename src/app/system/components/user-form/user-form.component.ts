@@ -11,7 +11,7 @@ import {
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
 import {UserService} from '../../services';
-import {User} from '../../domain';
+import {UserDTO} from '../../domain';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {BaseFormComponent} from '../../../shared';
 
@@ -21,10 +21,10 @@ import {BaseFormComponent} from '../../../shared';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
-export class UserFormComponent extends BaseFormComponent<User> implements OnInit, OnChanges {
+export class UserFormComponent extends BaseFormComponent<UserDTO> implements OnInit, OnChanges {
 
   constructor(fb: FormBuilder, cd: ChangeDetectorRef, private userService: UserService, message: NzMessageService) {
-    super(new User(), fb, cd, userService, message);
+    super(new UserDTO(), fb, cd, userService, message);
 
     this.validateForm = this.fb.group({
       id: [''],

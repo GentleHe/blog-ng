@@ -1,12 +1,11 @@
-export class User {
-  id = 0;
+import {BaseDTO} from "../../shared";
+
+export class UserDTO extends BaseDTO{
   username = '';
   nickname = '';
   gender = 1;
   email = '';
   password = '';
-  createTime = 0;
-  updateTime = 0;
 }
 
 export class Role {

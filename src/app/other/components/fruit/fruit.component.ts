@@ -17,9 +17,6 @@ export class FruitComponent extends BaseComponent<FruitDTO, FruitVO> implements 
     override baseDTO: FruitDTO = new FruitDTO();
 
 
-    columnItems: ColumnItem[] = [];
-    filterForm!: FormGroup;
-
 
     searchValue = '';
 
@@ -50,7 +47,7 @@ export class FruitComponent extends BaseComponent<FruitDTO, FruitVO> implements 
     /**
      * 重新加载数据（强制刷新缓存）
      */
-    reloadData() {
+    override reloadData() {
         console.log('重新加载数据，刷新缓存');
         this.loadDataFromServer(this.pageable);
     }

@@ -20,8 +20,5 @@ export class DictionaryTypeDTO extends BaseDTO {
     description?: string;
     builtIn?: boolean;
     labelLike?: string;
-    createTimeBegin?: string;
-    createTimeEnd?: string;
-    updateTimeBegin?: string;
-    updateTimeEnd?: string;
+
 }

@@ -26,13 +26,17 @@ export class Pageable {
   }
 }
 
+
 export class BaseDTO {
   id?: number;
-  createTime?: number;
-  updateTime?: number;
-  createBy?: string;
-  updateBy?: string;
-
+  createTime!: number;
+  updateTime!: number;
+  createBy!: string;
+  updateBy!: string;
+  createTimeBegin?: string;
+  createTimeEnd?: string;
+  updateTimeBegin?: string;
+  updateTimeEnd?: string;
   // 字符串的索引签名，这样的话就能允许  this.baseDTO['createBy']='hgf'的方式来给createBy赋值了
   [key: string]: any;
 }

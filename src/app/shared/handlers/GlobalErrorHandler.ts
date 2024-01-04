@@ -53,6 +53,10 @@ export class GlobalErrorHandler implements ErrorHandler {
           // });
           break;
         }
+        case RESPONSE_CODE.NotFound: {
+          this.notification.create("error", "请求的资源不存在", error.error.message, {nzPlacement: 'bottomRight'});
+          break;
+        }
         default: {
           console.log(`${error.url} 的响应状态码未知: ${error.status}`);
           break;

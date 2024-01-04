@@ -1,10 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {BaseDTO, BaseVO, Pageable} from "../../domain";
+import {BaseDTO, BaseVO, ColumnItem, Pageable} from "../../domain";
 import {BaseService} from "../../services";
 import {NzTableFilterValue, NzTableQueryParams, NzTableSortFn, NzTableSortOrder} from "ng-zorro-antd/table";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {isRequestSuccess} from "../../functions";
+import {formatDate, isRequestSuccess} from "../../functions";
 import {catchError, Observable, switchMap} from "rxjs";
+import {FormGroup} from "@angular/forms";
+import {DictionaryTypeDTO} from "../../../main-data/domain";
 
 
 export interface BaseComponentInterface<DTO extends BaseDTO, VO extends BaseVO> {
@@ -64,6 +66,17 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
   // 默认的传输层对象，初始为空，没有任何限制条件
   baseDTO = new BaseDTO() as DTO;
 
+  // 字段项数组
+  columnItems: ColumnItem[] = [];
+
+  // 过滤表单，用于顶部过滤组
+  filterForm: FormGroup = new FormGroup({});
+
+  // 过滤字段，用于表格内的等值查询
+  searchColumnName = ''
+  searchColumnKey = ''
+  searchColumnValue = '';
+
   // 分页对象
   pageable = new Pageable(this.pageIndex, this.pageSize, [], []);
 
@@ -85,7 +98,7 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
   ngOnInit(): void {
 
     // 一上来就要加载数据的
-    this.loadDataFromServer(this.pageable)
+    // this.loadDataFromServer(this.pageable)
 
 
   }
@@ -165,6 +178,45 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
       this.updateCheckedIds(datum.id!, checked)
     })
     this.refreshCheckedStatus()
+  }
+
+  search() {
+    this.baseDTO = this.filterForm.value;
+
+
+    const createTimeRange: Date[] = this.filterForm.controls['createTimeRange'].value;
+    if (createTimeRange && createTimeRange.length > 0) {
+      this.baseDTO.createTimeBegin = formatDate(createTimeRange[0])
+      this.baseDTO.createTimeEnd = formatDate(createTimeRange[1])
+    }
+
+    const updateTimeRange: Date[] = this.filterForm.controls['updateTimeRange'].value;
+    if (updateTimeRange &&updateTimeRange.length > 0) {
+      this.baseDTO.updateTimeBegin = formatDate(updateTimeRange[0])
+      this.baseDTO.updateTimeEnd = formatDate(updateTimeRange[1])
+    }
+
+    console.log(this.filterForm.value);
+
+    console.log(this.baseDTO);
+    this.reloadData();
+  }
+
+  /**
+   * 重新加载数据（强制刷新缓存）
+   */
+  reloadData() {
+    console.log('重新加载数据，刷新缓存');
+    this.loadDataFromServer(this.pageable);
+  }
+
+  /**
+   * 处理数据刷新，编辑表单提交后，刷新表格
+   * @param event
+   */
+  handleDataRefresh(event: any) {
+    console.log('event: ', event);
+    this.reloadData();
   }
 
   /**
@@ -255,6 +307,19 @@ export class BaseComponent<DTO extends BaseDTO, VO extends BaseVO> implements On
       }
 
     })
+  }
+
+  changeColumnName(i: number) {
+    this.searchColumnName = this.columnItems[i].name
+    this.searchColumnKey = this.columnItems[i].key
+  }
+
+
+  /**
+   * 处理字段过滤器搜索
+   * @param event
+   */
+  handleFilterSearch(event: { column: string; searchValue: string }) {
   }
 
 

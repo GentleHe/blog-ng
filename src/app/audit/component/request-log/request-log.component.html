@@ -1,0 +1,126 @@
+<!--顶部组-->
+<div class="top-group">
+  <!--顶部操作组-->
+  <div class="top-group-operation">
+    <button nz-button (click)="reloadData()" nzType="primary">刷新</button>
+    <button nz-button (click)="doExport()" nzType="primary">导出</button>
+  </div>
+
+  <!--顶部过滤组-->
+  <div class="top-group-filter">
+
+    <form nz-form [formGroup]="filterForm" (submit)="search()" nzLayout="inline">
+      <div nz-row [nzGutter]="[16, 24]">
+        <div nz-col nzSpan="7">
+
+
+          <nz-form-item>
+            <nz-form-label>url</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="urlLike" placeholder="清输入请求资源模糊进行筛选"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label>开始时间</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker formControlName="startTimeRange"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="9">
+          <nz-form-item>
+            <nz-form-label>结束时间</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker formControlName="returnTimeRange"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button type="reset" nzType="primary">重置</button>
+            <button nz-button type="submit" nzType="primary">搜索</button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!--数据表格-->
+<nz-table
+  nzTitle="字典分类管理"
+  nzBordered
+  [nzData]="data"
+  [nzFrontPagination]="false"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="true"
+  [nzShowTotal]="showTotalTemplate"
+  [nzLoading]="loading"
+  [nzWidthConfig]="widthConfig"
+  nzTableLayout="fixed"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <!--表头-->
+  <thead>
+  <tr>
+    <th [nzAlign]="'center'"
+        [nzSelections]="selectedData"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        nzShowRowSelection="false"
+        [nzSelections]="idSelection"
+        (nzCheckedChange)="onAllCheckedChange($event)">
+
+    </th>
+    <th [nzAlign]="'center'" *ngFor="let columnItem of columnItems;let i=index;"
+        [nzColumnKey]="columnItem.key" [nzFilterFn]="true" [nzSortFn]="true"
+    >
+      {{columnItem.name}}
+      <!--      <nz-filter-trigger [nzVisible]="true" [nzActive]="true" [nzDropdownMenu]="menu">-->
+      <span *ngIf="columnItem.showFilter" nz-icon nzType="search" nz-popover (mouseover)="changeColumnName(i)" [nzPopoverContent]="sp"></span>
+      <!--      </nz-filter-trigger>-->
+    </th>
+  </tr>
+  </thead>
+  <!--表体-->
+  <tbody>
+  <tr *ngFor="let datum of data">
+    <td
+      [nzBreakWord]="true"
+      [nzAlign]="'center'"
+      [nzChecked]="checkedIds.has(datum.id!!)"
+      (nzCheckedChange)="onDatumCheckedChange(datum.id!!, $event)"
+    ></td>
+    <td [nzAlign]="'center'" *ngFor="let columnItem of columnItems">{{datum[columnItem.key]}}</td>
+  </tr>
+  </tbody>
+
+</nz-table>
+
+<!--显示总量相关的信息-->
+<ng-template #showTotalTemplate let-total let-range="range">
+  当前：【{{range[0]}} - {{range[1]}}】 总共： 【{{total}}】 个记录
+</ng-template>
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" />
+      <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+      <button nz-button nzSize="small" >Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+
+<ng-template #sp>
+  <app-column-filter  [columnName]="searchColumnName" [columnKey]="searchColumnKey"  (searchEmitter)="handleFilterSearch($event)"></app-column-filter>
+</ng-template>
