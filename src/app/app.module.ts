@@ -8,7 +8,7 @@ import {zh_CN} from 'ng-zorro-antd/i18n';
 import {registerLocaleData} from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GlobalErrorHandler} from "./shared/handlers/GlobalErrorHandler";
 
@@ -22,7 +22,6 @@ registerLocaleData(zh);
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
   ],
   providers: [
@@ -30,7 +29,7 @@ registerLocaleData(zh);
     {provide: NZ_I18N, useValue: zh_CN},
     // 注册全局异常处理
     {provide: ErrorHandler, useClass: GlobalErrorHandler},
-
+    provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent]
 })
