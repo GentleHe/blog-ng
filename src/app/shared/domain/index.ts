@@ -3,7 +3,7 @@ import {NzTreeBaseService} from "ng-zorro-antd/core/tree";
 import {NzSafeAny} from "ng-zorro-antd/core/types";
 
 export interface Result {
-  status: number;
+  code: number;
   message: string;
   data: any;
 }

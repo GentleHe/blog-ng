@@ -376,6 +376,7 @@ export class BaseFormComponent<T extends BaseDTO> implements OnInit, BaseFormInt
     this.beforeSubmitForm(this.validateForm);
 
     if (!this.validateForm.valid) {
+      this.message.create("warning", "非法表单")
       return
     }
 

@@ -124,7 +124,7 @@ export class CommonCrudService<T> implements CommonCrudServiceInterface<T> {
 
     forkJoin(requestArray).subscribe(results => {
       for (let i = 0; i < results.length; i++) {
-        if (results[i].status !== 0) {
+        if (results[i].code !== 0) {
           errorIds.push(idArray[i]);
         }
       }

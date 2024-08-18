@@ -6,7 +6,7 @@ import {REQUEST_OK} from "../constant";
  * @param result
  */
 export function isRequestSuccess(result: Result): boolean {
-  if (result.status !== REQUEST_OK) {
+  if (result.code !== REQUEST_OK) {
     return false;
   }
   return true;
