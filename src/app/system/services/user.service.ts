@@ -12,8 +12,8 @@ export class UserService extends BaseService<UserDTO, UserVO> {
 
   constructor(http: HttpClient) {
     super(http);
-    super.serviceName='user'
-    console.log(super.baseUrl);
+    this.serviceName='user'
+    console.log(this.baseUrl);
   }
 
 }

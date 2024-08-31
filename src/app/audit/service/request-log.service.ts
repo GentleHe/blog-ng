@@ -10,6 +10,6 @@ export class RequestLogService extends BaseService<RequestLogDTO, RequestLogVO>{
 
   constructor(http: HttpClient) {
     super(http);
-    super.serviceName='requestLog'
+    this.serviceName='requestLog'
   }
 }

@@ -12,8 +12,8 @@ export class FruitService extends BaseService<FruitDTO, FruitVO>{
 
   constructor(http: HttpClient) {
     super(http);
-    super.serviceName='fruit'
-    console.log(super.baseUrl);
+    this.serviceName='fruit'
+    console.log(this.baseUrl);
   }
 
 }

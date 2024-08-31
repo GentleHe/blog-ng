@@ -10,7 +10,7 @@ export class DictionaryTypeService extends BaseService<DictionaryTypeDTO, Dictio
 
   constructor(http: HttpClient) {
     super(http)
-    super.serviceName='dictionaryType'
+    this.serviceName='dictionaryType'
     console.log(this.serviceName, ' init');
   }
 }

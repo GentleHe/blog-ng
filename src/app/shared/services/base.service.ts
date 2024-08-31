@@ -58,7 +58,7 @@ export class BaseService<DTO extends BaseDTO, VO extends BaseVO> implements Base
   //服务名
   serviceName?: string;
 
-  baseUrl = `${environment.baseUrl}/`;
+  public baseUrl = `${environment.baseUrl}/`;
 
   constructor(protected http: HttpClient) {
     console.log('this.baseUrl: ' + this.baseUrl);
