@@ -1,0 +1,43 @@
+
+
+.segment-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  margin-block-end: 1rem;
+}
+
+.btn-wrappers {
+  block-size: 50rem;
+  border: 1px solid var(--ant-primary-6);
+  flex-direction: column;
+}
+
+
+.login-div{
+  display: flex;
+  flex-direction: row;
+}
+
+.login-separator{
+  width:1rem;
+  height: 100%;
+  border-left: #abc4de;
+}
+
+.login-form {
+  max-width: 300px;
+}
+
+.login-form-margin {
+  margin-bottom: 16px;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-button {
+  width: 100%;
+}

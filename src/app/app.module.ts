@@ -11,6 +11,9 @@ import {FormsModule} from '@angular/forms';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GlobalErrorHandler} from "./shared/handlers/GlobalErrorHandler";
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import {NzImageModule, NzImageService} from "ng-zorro-antd/image";
+
 
 registerLocaleData(zh);
 
@@ -28,7 +31,9 @@ registerLocaleData(zh);
     // 注册国际化
     {provide: NZ_I18N, useValue: zh_CN},
     // 注册全局异常处理
-    {provide: ErrorHandler, useClass: GlobalErrorHandler},
+    // {provide: ErrorHandler, useClass: GlobalErrorHandler},
+    {provide: NzIconModule},
+    // {provide: NzImageModule},
     provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent]

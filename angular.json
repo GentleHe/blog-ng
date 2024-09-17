@@ -27,11 +27,14 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
+
               {
                 "glob": "**/*",
-                "input": "./node_modules\\.pnpm\\@ant-design+icons-angular@16.0.0_@angular+common@16.2.12_@angular+core@16.2.12_@angular+platf_jddactbva7kf3mndp6ovyj2me4\\node_modules\\@ant-design\\icons-angular\\src\\inline-svg",
+                "input": "src/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
               }
             ],

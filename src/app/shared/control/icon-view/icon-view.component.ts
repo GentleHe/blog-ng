@@ -1,7 +1,7 @@
 import {Component, OnInit, EventEmitter, Output, Input, OnChanges, SimpleChanges, forwardRef} from '@angular/core';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
-import {icons} from '../../../icons-provider.module';
+// import {icons} from '../../../icons-provider.module';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 
@@ -14,6 +14,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   selector: 'app-icon-view',
   templateUrl: './icon-view.component.html',
   styleUrls: ['./icon-view.component.css'],
+  standalone: true,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => IconViewComponent),

@@ -1,0 +1,59 @@
+<div
+  class="btn-wrappers"
+  nz-flex
+  nzJustify="center"
+  nzAlign="center"
+
+>
+
+  <!--<div>-->
+  <div class="login-div">
+    <div>
+<!--      <img nz-image  ngSrc="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"  width="400" height="300" alt="登录图片"/>-->
+      <img nz-image nzSrc="lucy.png"  width="300" height="220" alt="登录图片"/>
+    </div>
+
+    <div class="login-separator"></div>
+
+    <div class="loginDiv">
+      <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="请输入用户名!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userName" placeholder="请输入用户名"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="请输入密码!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="请输入密码"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-row class="login-form-margin">
+          <div nz-col [nzSpan]="12">
+            <label nz-checkbox formControlName="remember">
+              <span>记住登录</span>
+            </label>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <a class="login-form-forgot">忘记密码</a>
+          </div>
+        </div>
+        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">登录</button>
+        没有账号？
+        <a>去注册!</a>
+        <span nz-icon [nzType]="'home'"></span>
+      </form>
+    </div>
+  </div>
+
+  <!--  <nz-divider style="display: block;" nzText="With Text"></nz-divider>-->
+  <!--  <div>-->
+  <!--    <button nz-button nzType="primary">Primary</button>-->
+  <!--    <button nz-button nzType="primary">Primary</button>-->
+  <!--    <button nz-button nzType="primary">Primary</button>-->
+  <!--    <button nz-button nzType="primary">Primary</button>-->
+  <!--  </div>-->
+  <!--</div>-->
