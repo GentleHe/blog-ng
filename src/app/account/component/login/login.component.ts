@@ -12,6 +12,9 @@ import {NzCheckboxComponent} from "ng-zorro-antd/checkbox";
 import {NzImageDirective, NzImageModule, NzImageService} from "ng-zorro-antd/image";
 import {NzImageViewComponent} from "ng-zorro-antd/experimental/image";
 import {NzMessageService} from "ng-zorro-antd/message";
+import {CookieService} from "ngx-cookie-service";
+import {Router} from "@angular/router";
+import {setLoginUser} from "../../../shared/functions";
 
 @Component({
   selector: 'app-login',
@@ -64,7 +67,12 @@ export class LoginComponent {
     let userName = this.validateForm.controls['userName'].value;
     let password = this.validateForm.controls['password'].value;
     if(userName=='hgf' && password ==='123'){
-      localStorage.setItem('loginUser', 'hgf')
+      // localStorage.setItem('loginUser', 'hgf')
+      this.cookieService.set('loginUser', 'hgf');
+      setLoginUser('hgf')
+
+      if(this.router ){
+      }
       this.ms.success('登录成功')
     }else{
       this.ms.error('登录失败')
@@ -72,7 +80,7 @@ export class LoginComponent {
 
   }
 
-  constructor(private fb: NonNullableFormBuilder, private ms: NzMessageService) {
+  constructor(private fb: NonNullableFormBuilder, private ms: NzMessageService, private cookieService: CookieService, private router: Router) {
 
   }
 }

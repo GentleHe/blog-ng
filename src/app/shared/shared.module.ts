@@ -18,6 +18,7 @@ import {NzUploadModule} from "ng-zorro-antd/upload";
 import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
 import {NzDropDownModule} from "ng-zorro-antd/dropdown";
 import {NzImageModule} from "ng-zorro-antd/image";
+import {CookieService} from "ngx-cookie-service";
 // import {NzMessageModule} from "ng-zorro-antd/message";
 
 
@@ -55,6 +56,8 @@ import {NzImageModule} from "ng-zorro-antd/image";
     NzFormModule,
     ReactiveFormsModule,
     ColumnFilterComponent,
+  ],
+  providers: [
   ]
 })
 export class SharedModule {
