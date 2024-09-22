@@ -59,6 +59,7 @@ nz-content {
   font-size: 20px;
   cursor: pointer;
   transition: all .3s,padding 0s;
+  display: flex;
 }
 
 .trigger:hover {
@@ -104,6 +105,9 @@ nz-header {
   padding: 0;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  display: flex;
+  justify-content: space-between;
+
 }
 
 .app-tab-box{
@@ -124,3 +128,6 @@ nz-content {
   height: 100%;
 }
 
+.app-header-login-div{
+  display: inline-block;
+}

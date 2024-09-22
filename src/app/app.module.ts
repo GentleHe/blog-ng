@@ -13,6 +13,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GlobalErrorHandler} from "./shared/handlers/GlobalErrorHandler";
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import {NzImageModule, NzImageService} from "ng-zorro-antd/image";
+import {RouteReuseStrategy} from "@angular/router";
 
 
 registerLocaleData(zh);

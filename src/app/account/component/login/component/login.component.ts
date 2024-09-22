@@ -14,7 +14,7 @@ import {NzImageViewComponent} from "ng-zorro-antd/experimental/image";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
-import {setLoginUser} from "../../../shared/functions";
+import {setLoginUser} from "../../../../shared";
 
 @Component({
   selector: 'app-login',
@@ -66,12 +66,19 @@ export class LoginComponent {
 
     let userName = this.validateForm.controls['userName'].value;
     let password = this.validateForm.controls['password'].value;
-    if(userName=='hgf' && password ==='123'){
+    if(password ==='123'){
       // localStorage.setItem('loginUser', 'hgf')
-      this.cookieService.set('loginUser', 'hgf');
-      setLoginUser('hgf')
+      this.cookieService.set('loginUser', userName);
+      setLoginUser(userName)
 
-      if(this.router ){
+      let queryParams = this.router.parseUrl(this.router.url).queryParams
+
+      // 从哪来到哪去
+      if(queryParams['whereFrom']){
+        this.router.navigate([queryParams['whereFrom']])
+      }else{
+        // 没有指定来源则默认跳转到首页
+        this.router.navigate(['/hello']);
       }
       this.ms.success('登录成功')
     }else{

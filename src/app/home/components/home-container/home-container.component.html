@@ -86,43 +86,42 @@
                [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
             ></i>
         </span>
-        <span>登录1</span>
 
         <div *ngIf="loginUser  else nologinTemplate ">
           <div style="display: inline-block">
             <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-              {{loginUser}}
-              <span nz-icon nzType="down"></span>
-
+              <span>您好，</span>
+              <nz-avatar
+                [nzText]="loginUser"
+                nzSize="large"
+                style="vertical-align: middle;"
+              ></nz-avatar>
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item (click)="logout()">退出登录</li>
-                <li nz-menu-item>2nd menu item</li>
-                <li nz-menu-divider></li>
-                <li nz-menu-item nzDisabled>disabled menu item</li>
-                <li nz-submenu nzTitle="sub menu">
-                  <ul>
-                    <li nz-menu-item>3rd menu item</li>
-                    <li nz-menu-item>4th menu item</li>
-                  </ul>
-                </li>
-                <li nz-submenu nzDisabled nzTitle="disabled sub menu">
-                  <ul>
-                    <li nz-menu-item>3rd menu item</li>
-                    <li nz-menu-item>4th menu item</li>
-                  </ul>
-                </li>
+                <li nz-menu-item (click)="loginService.logout()">退出登录</li>
+<!--                <li nz-menu-item>2nd menu item</li>-->
+<!--                <li nz-menu-divider></li>-->
+<!--                <li nz-menu-item nzDisabled>disabled menu item</li>-->
+<!--                <li nz-submenu nzTitle="sub menu">-->
+<!--                  <ul>-->
+<!--                    <li nz-menu-item>3rd menu item</li>-->
+<!--                    <li nz-menu-item>4th menu item</li>-->
+<!--                  </ul>-->
+<!--                </li>-->
+<!--                <li nz-submenu nzDisabled nzTitle="disabled sub menu">-->
+<!--                  <ul>-->
+<!--                    <li nz-menu-item>3rd menu item</li>-->
+<!--                    <li nz-menu-item>4th menu item</li>-->
+<!--                  </ul>-->
+<!--                </li>-->
               </ul>
             </nz-dropdown-menu>
           </div>
         </div>
 
-<!--        <ng-template #loginTemplate>-->
-
-<!--        </ng-template>-->
         <ng-template #nologinTemplate>
-          <div ><a (click)="goLogin()">请登录！</a></div>
+          <div class="app-header-login-div"><a (click)="goLogin()">请登录！</a></div>
         </ng-template>
       </div>
     </nz-header>

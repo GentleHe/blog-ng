@@ -3,7 +3,7 @@ import {BaseDTO, BaseVO, ColumnItem, Pageable} from "../../domain";
 import {BaseService} from "../../services";
 import {NzTableFilterValue, NzTableQueryParams, NzTableSortFn, NzTableSortOrder} from "ng-zorro-antd/table";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {formatDate, isRequestSuccess} from "../../functions";
+import {formatDate, isRequestSuccess} from "../../function";
 import {catchError, Observable, switchMap} from "rxjs";
 import {FormGroup} from "@angular/forms";
 import {DictionaryTypeDTO} from "../../../main-data/domain";

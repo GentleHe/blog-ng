@@ -21,7 +21,7 @@ import {firstValueFrom, observable, Observable, Observer} from "rxjs";
 import {BaseService} from "../../services";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {BaseDTO, BaseVO} from "../../domain";
-import {isRequestSuccess} from "../../functions";
+import {isRequestSuccess} from "../../function";
 import {RESPONSE_CODE} from "../../constant";
 
 export interface BaseFormInterface<T> {

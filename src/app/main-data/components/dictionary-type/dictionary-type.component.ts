@@ -13,7 +13,7 @@ import {FruitService} from "../../../other";
 import {DictionaryTypeService} from "../../service";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {Format} from "@angular-devkit/build-angular/src/builders/extract-i18n/schema";
-import {formatDate, formatDateTime} from "../../../shared/functions";
+import {formatDate, formatDateTime} from "../../../shared";
 import {environment} from "../../../../environments/environment";
 
 @Component({

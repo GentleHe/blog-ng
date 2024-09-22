@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
-import {getLoginUser, setLoginUser} from "../../../shared/functions";
+import {getLoginUser, setLoginUser} from "../../../shared";
+import {LoginService} from "../../../account";
 
 @Component({
   selector: 'app-home-container',
@@ -12,26 +13,18 @@ export class HomeContainerComponent implements OnInit {
 
   isCollapsed=true;
 
-  cookieService: CookieService;
-  router: Router;
 
-  constructor(router: Router, private cs: CookieService) {
-    this.cookieService = cs;
-    this.router = router;
+  constructor(private router: Router, private cookieService: CookieService, protected loginService: LoginService) {
+    // this.cookieService = cs;
+    // this.router = router;
   }
 
-  loginUser: string = '';
+  loginUser: string |null = null;
   ngOnInit(): void {
+    console.log('homeContainer初始化');
     this.loginUser = getLoginUser()
   }
 
-
-  logout(): void{
-    console.log('退出登录操作');
-    this.cookieService.delete('loginUser')
-    setLoginUser('')
-    this.router.navigateByUrl('/')
-  }
 
   goLogin() {
       console.log(this.router.url);

@@ -4,7 +4,7 @@ import {RequestLogDTO, RequestLogVO} from "../../domain";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {RequestLogService} from "../../service/request-log.service";
 import {FormBuilder} from "@angular/forms";
-import {formatDate} from "../../../shared/functions";
+import {formatDate} from "../../../shared";
 
 @Component({
   selector: 'app-request-log',
